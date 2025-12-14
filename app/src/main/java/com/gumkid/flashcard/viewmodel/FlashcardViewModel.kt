@@ -116,6 +116,7 @@ class FlashcardViewModel @Inject constructor(
 
                 repository.updateFlashcard(flashcard)
                 loadAllFlashcards()
+                _successMessage.value = "Flashcard updated successfully"
                 _errorMessage.value = null
             } catch (e: Exception) {
                 _errorMessage.value = "Failed to update flashcard: ${e.message}"

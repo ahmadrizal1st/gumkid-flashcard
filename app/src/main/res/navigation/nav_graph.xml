@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/loginFragment">
+
+    <!-- Login Fragment -->
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.gumkid.flashcard.ui.auth.LoginFragment"
+        android:label="Login"
+        tools:layout="@layout/fragment_login">
+
+        <action
+            android:id="@+id/action_loginFragment_to_registerFragment"
+            app:destination="@id/registerFragment" />
+
+        <action
+            android:id="@+id/action_loginFragment_to_flashcardListFragment"
+            app:destination="@id/flashcardListFragment" />
+
+    </fragment>
+
+    <!-- Register Fragment -->
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.gumkid.flashcard.ui.auth.RegisterFragment"
+        android:label="Register"
+        tools:layout="@layout/fragment_register">
+
+        <action
+            android:id="@+id/action_registerFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+
+        <action
+            android:id="@+id/action_registerFragment_to_flashcardListFragment"
+            app:destination="@id/flashcardListFragment" />
+
+    </fragment>
+
+    <!-- Flashcard List Fragment -->
+    <fragment
+        android:id="@+id/flashcardListFragment"
+        android:name="com.gumkid.flashcard.ui.flashcardlist.FlashcardListFragment"
+        android:label="Flashcards"
+        tools:layout="@layout/fragment_flashcard_list">
+
+        <!-- Actions dari FlashcardListFragment ke AddFlashcardFragment -->
+        <action
+            android:id="@+id/action_flashcardListFragment_to_addFlashcardFragment"
+            app:destination="@id/addFlashcardFragment" />
+
+        <!-- Actions dari FlashcardListFragment ke FlashcardDetailFragment -->
+        <action
+            android:id="@+id/action_flashcardListFragment_to_flashcardDetailFragment"
+            app:destination="@id/flashcardDetailFragment" />
+
+        <!-- Action to login fragment -->
+        <action
+            android:id="@+id/action_flashcardListFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
+
+    </fragment>
+
+    <!-- Add Flashcard Fragment -->
+    <fragment
+        android:id="@+id/addFlashcardFragment"
+        android:name="com.gumkid.flashcard.ui.addflashcard.AddFlashcardFragment"
+        android:label="Add Flashcard"
+        tools:layout="@layout/fragment_add_flashcard">
+        <!-- No arguments needed for adding new flashcard -->
+    </fragment>
+
+    <!-- Flashcard Detail Fragment -->
+    <fragment
+        android:id="@+id/flashcardDetailFragment"
+        android:name="com.gumkid.flashcard.ui.flashcarddetail.FlashcardDetailFragment"
+        android:label="Flashcard Details"
+        tools:layout="@layout/fragment_flashcard_detail">
+
+        <!-- Argument untuk menerima flashcardId -->
+        <argument
+            android:name="flashcardId"
+            app:argType="string" />
+
+        <!-- Action dari FlashcardDetailFragment ke EditFlashcardFragment -->
+        <action
+            android:id="@+id/action_flashcardDetailFragment_to_editFlashcardFragment"
+            app:destination="@id/editFlashcardFragment" />
+
+    </fragment>
+
+    <!-- Edit Flashcard Fragment -->
+    <fragment
+        android:id="@+id/editFlashcardFragment"
+        android:name="com.gumkid.flashcard.ui.editflashcard.EditFlashcardFragment"
+        android:label="Edit Flashcard"
+        tools:layout="@layout/fragment_edit_flashcard">
+
+        <!-- Argument untuk menerima flashcardId -->
+        <argument
+            android:name="flashcardId"
+            app:argType="string" />
+
+    </fragment>
+
+</navigation>

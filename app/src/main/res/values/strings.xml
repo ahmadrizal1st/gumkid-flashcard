@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Flashcard App</string>
+    <string name="add_flashcard">Add Flashcard</string>
+    <string name="question">Question</string>
+    <string name="answer">Answer</string>
+    <string name="category">Category</string>
+    <string name="difficulty">Difficulty</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="show_answer">Show Answer</string>
+</resources>

@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "200020979234",
+    "project_id": "gumkid-flashcard",
+    "storage_bucket": "gumkid-flashcard.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:200020979234:android:ce71222c2025568a0ba47b",
+        "android_client_info": {
+          "package_name": "com.gumkid.flashcard"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCVn0GDTAGphCxVc0P9Q-Z9nnHysCeMj9k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:200020979234:android:0b8c19f1f9bc05b70ba47b",
+        "android_client_info": {
+          "package_name": "com.gumkid.flashcard.di"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCVn0GDTAGphCxVc0P9Q-Z9nnHysCeMj9k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

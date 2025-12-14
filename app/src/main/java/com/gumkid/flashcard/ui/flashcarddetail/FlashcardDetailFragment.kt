@@ -38,6 +38,12 @@ class FlashcardDetailFragment : Fragment() {
         setupListeners()
     }
 
+    override fun onResume() {
+        super.onResume()
+        // Reload flashcard data ketika kembali dari edit
+        loadFlashcard()
+    }
+
     private fun loadFlashcard() {
         // Get flashcardId from navigation arguments
         val flashcardId = args.flashcardId

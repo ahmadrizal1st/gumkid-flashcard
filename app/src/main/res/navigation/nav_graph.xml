@@ -105,6 +105,11 @@
             android:name="flashcardId"
             app:argType="string" />
 
+        <!-- Action kembali ke FlashcardDetailFragment -->
+        <action
+            android:id="@+id/action_editFlashcardFragment_to_flashcardDetailFragment"
+            app:destination="@id/flashcardDetailFragment" />
+
     </fragment>
 
 </navigation>

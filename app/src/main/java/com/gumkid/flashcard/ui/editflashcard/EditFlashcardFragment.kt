@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.gumkid.flashcard.R
 import com.gumkid.flashcard.databinding.FragmentEditFlashcardBinding
 import com.gumkid.flashcard.viewmodel.FlashcardViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -80,6 +81,7 @@ class EditFlashcardFragment : Fragment() {
             message?.let {
                 Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
                 viewModel.clearSuccessMessage()
+                // Navigate back to detail fragment
                 findNavController().popBackStack()
             }
         }
@@ -113,7 +115,6 @@ class EditFlashcardFragment : Fragment() {
                         category,
                         difficulty
                     )
-                    findNavController().popBackStack()
                 }
             }
         }

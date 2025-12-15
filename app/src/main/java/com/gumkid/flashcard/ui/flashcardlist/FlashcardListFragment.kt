@@ -1,6 +1,8 @@
 package com.gumkid.flashcard.ui.flashcardlist
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -85,6 +87,14 @@ class FlashcardListFragment : Fragment() {
             binding.tvEmpty.visibility = if (flashcards.isEmpty()) View.VISIBLE else View.GONE
         }
 
+        viewModel.totalCount.observe(viewLifecycleOwner) { count ->
+            binding.tvTotalCount.text = count.toString()
+        }
+
+        viewModel.reviewCount.observe(viewLifecycleOwner) { count ->
+            binding.tvReviewCount.text = count.toString()
+        }
+
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
         }
@@ -110,6 +120,21 @@ class FlashcardListFragment : Fragment() {
         binding.btnLogout.setOnClickListener {
             authViewModel.signOut()
             findNavController().navigate(R.id.action_flashcardListFragment_to_loginFragment)
+        }
+
+        // Search functionality
+        binding.etSearch.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable?) {
+                viewModel.searchFlashcards(s?.toString())
+            }
+        })
+
+        // Filter button - show filter dialog
+        binding.btnFilter.setOnClickListener {
+            val filterDialog = FilterDialogFragment()
+            filterDialog.show(childFragmentManager, "FilterDialog")
         }
     }
 

@@ -19,6 +19,7 @@ class FlashcardViewModel @Inject constructor(
     @ApplicationContext private val context: Context
 ) : ViewModel() {
 
+    private val _allFlashcards = MutableLiveData<List<Flashcard>>()
     private val _flashcards = MutableLiveData<List<Flashcard>>()
     val flashcards: LiveData<List<Flashcard>> = _flashcards
 
@@ -37,6 +38,17 @@ class FlashcardViewModel @Inject constructor(
     private val _categories = MutableLiveData<List<String>>()
     val categories: LiveData<List<String>> = _categories
 
+    private val _totalCount = MutableLiveData<Int>()
+    val totalCount: LiveData<Int> = _totalCount
+
+    private val _reviewCount = MutableLiveData<Int>()
+    val reviewCount: LiveData<Int> = _reviewCount
+
+    // Current filter state
+    private var currentSearchQuery: String? = null
+    private var currentSelectedCategories: List<String>? = null
+    private var currentSelectedDifficulties: List<Int>? = null
+
     init {
         loadAllFlashcards()
     }
@@ -46,8 +58,11 @@ class FlashcardViewModel @Inject constructor(
             _isLoading.value = true
             try {
                 val result = repository.getAllFlashcards()
-                _flashcards.value = result
+                _allFlashcards.value = result
                 extractCategories(result)
+                _totalCount.value = result.size
+                _reviewCount.value = result.size // For now, assume all need review
+                applyFilters()
                 _errorMessage.value = null
             } catch (e: Exception) {
                 _errorMessage.value = "Failed to load flashcards: ${e.message}"
@@ -151,18 +166,7 @@ class FlashcardViewModel @Inject constructor(
     }
 
     fun loadFlashcardsByCategory(category: String) {
-        viewModelScope.launch {
-            _isLoading.value = true
-            try {
-                val result = repository.getFlashcardsByCategory(category)
-                _flashcards.value = result
-                _errorMessage.value = null
-            } catch (e: Exception) {
-                _errorMessage.value = "Failed to load flashcards: ${e.message}"
-            } finally {
-                _isLoading.value = false
-            }
-        }
+        filterByCategories(listOf(category))
     }
 
     private fun extractCategories(flashcards: List<Flashcard>) {
@@ -185,5 +189,63 @@ class FlashcardViewModel @Inject constructor(
 
     fun clearSuccessMessage() {
         _successMessage.value = null
+    }
+
+    private fun applyFilters() {
+        val allFlashcards = _allFlashcards.value ?: return
+        var filtered = allFlashcards
+
+        // Apply search query
+        currentSearchQuery?.let { query ->
+            if (query.isNotBlank()) {
+                filtered = filtered.filter { flashcard ->
+                    flashcard.question.contains(query, ignoreCase = true) ||
+                    flashcard.answer.contains(query, ignoreCase = true) ||
+                    flashcard.category.contains(query, ignoreCase = true)
+                }
+            }
+        }
+
+        // Apply category filter
+        currentSelectedCategories?.let { categories ->
+            if (categories.isNotEmpty()) {
+                filtered = filtered.filter { flashcard ->
+                    categories.contains(flashcard.category)
+                }
+            }
+        }
+
+        // Apply difficulty filter
+        currentSelectedDifficulties?.let { difficulties ->
+            if (difficulties.isNotEmpty()) {
+                filtered = filtered.filter { flashcard ->
+                    difficulties.contains(flashcard.difficulty)
+                }
+            }
+        }
+
+        _flashcards.value = filtered
+    }
+
+    fun searchFlashcards(query: String?) {
+        currentSearchQuery = query
+        applyFilters()
+    }
+
+    fun filterByCategories(categories: List<String>?) {
+        currentSelectedCategories = categories
+        applyFilters()
+    }
+
+    fun filterByDifficulties(difficulties: List<Int>?) {
+        currentSelectedDifficulties = difficulties
+        applyFilters()
+    }
+
+    fun clearFilters() {
+        currentSearchQuery = null
+        currentSelectedCategories = null
+        currentSelectedDifficulties = null
+        applyFilters()
     }
 }

@@ -10,6 +10,8 @@ import com.gumkid.flashcard.model.Flashcard
 
 class FlashcardAdapter(
     private val onItemClick: (Flashcard) -> Unit,
+    private val onViewClick: (Flashcard) -> Unit,
+    private val onEditClick: (Flashcard) -> Unit,
     private val onDeleteClick: (Flashcard) -> Unit
 ) : ListAdapter<Flashcard, FlashcardAdapter.FlashcardViewHolder>(FlashcardDiffCallback()) {
 
@@ -36,6 +38,20 @@ class FlashcardAdapter(
                 val position = bindingAdapterPosition
                 if (position != RecyclerView.NO_POSITION) {
                     onItemClick(getItem(position))
+                }
+            }
+
+            binding.btnView.setOnClickListener {
+                val position = bindingAdapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    onViewClick(getItem(position))
+                }
+            }
+
+            binding.btnEdit.setOnClickListener {
+                val position = bindingAdapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    onEditClick(getItem(position))
                 }
             }
 

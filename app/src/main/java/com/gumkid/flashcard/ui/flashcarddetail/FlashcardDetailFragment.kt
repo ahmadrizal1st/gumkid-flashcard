@@ -58,7 +58,7 @@ class FlashcardDetailFragment : Fragment() {
                 binding.tvCategory.text = "Category: ${it.category}"
                 binding.tvDifficulty.text = "Difficulty: ${it.difficulty}/5"
 
-                binding.tvAnswer.visibility = View.GONE
+                binding.answerContainer.visibility = View.GONE
                 binding.btnShowAnswer.visibility = View.VISIBLE
             }
         }
@@ -70,7 +70,7 @@ class FlashcardDetailFragment : Fragment() {
 
     private fun setupListeners() {
         binding.btnShowAnswer.setOnClickListener {
-            binding.tvAnswer.visibility = View.VISIBLE
+            binding.answerContainer.visibility = View.VISIBLE
             binding.btnShowAnswer.visibility = View.GONE
         }
 

@@ -58,6 +58,18 @@ class FlashcardListFragment : Fragment() {
                     .actionFlashcardListFragmentToFlashcardDetailFragment(flashcard.id)
                 findNavController().navigate(action)
             },
+            onViewClick = { flashcard ->
+                // Navigate to detail with flashcard ID
+                val action = FlashcardListFragmentDirections
+                    .actionFlashcardListFragmentToFlashcardDetailFragment(flashcard.id)
+                findNavController().navigate(action)
+            },
+            onEditClick = { flashcard ->
+                // Navigate to edit with flashcard ID
+                val action = FlashcardListFragmentDirections
+                    .actionFlashcardListFragmentToEditFlashcardFragment(flashcard.id)
+                findNavController().navigate(action)
+            },
             onDeleteClick = { flashcard ->
                 viewModel.deleteFlashcard(flashcard.id)
             }

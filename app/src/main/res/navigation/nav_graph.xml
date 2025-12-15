@@ -56,6 +56,11 @@
             android:id="@+id/action_flashcardListFragment_to_flashcardDetailFragment"
             app:destination="@id/flashcardDetailFragment" />
 
+        <!-- Actions dari FlashcardListFragment ke EditFlashcardFragment -->
+        <action
+            android:id="@+id/action_flashcardListFragment_to_editFlashcardFragment"
+            app:destination="@id/editFlashcardFragment" />
+
         <!-- Action to login fragment -->
         <action
             android:id="@+id/action_flashcardListFragment_to_loginFragment"

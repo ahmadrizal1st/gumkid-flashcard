@@ -1,18 +1,22 @@
 package com.gumkid.flashcard.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseUser
 import com.gumkid.flashcard.repository.AuthRepository
+import com.gumkid.flashcard.util.NotificationHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    @ApplicationContext private val context: Context
 ) : ViewModel() {
 
     private val _authState = MutableLiveData<AuthState>()
@@ -59,6 +63,11 @@ class AuthViewModel @Inject constructor(
             result.fold(
                 onSuccess = { user ->
                     _authState.value = AuthState.Authenticated(user)
+                    NotificationHelper.showFlashcardNotification(
+                        context,
+                        "Registration Successful",
+                        "Welcome! Your account has been created successfully"
+                    )
                 },
                 onFailure = { exception ->
                     _authState.value = AuthState.Error(exception.message ?: "Registration failed")

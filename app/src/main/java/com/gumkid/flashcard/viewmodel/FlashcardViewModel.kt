@@ -1,18 +1,22 @@
 package com.gumkid.flashcard.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gumkid.flashcard.model.Flashcard
 import com.gumkid.flashcard.repository.FlashcardRepository
+import com.gumkid.flashcard.util.NotificationHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class FlashcardViewModel @Inject constructor(
-    private val repository: FlashcardRepository
+    private val repository: FlashcardRepository,
+    @ApplicationContext private val context: Context
 ) : ViewModel() {
 
     private val _flashcards = MutableLiveData<List<Flashcard>>()
@@ -82,6 +86,11 @@ class FlashcardViewModel @Inject constructor(
                 repository.addFlashcard(flashcard)
                 loadAllFlashcards()
                 _successMessage.value = "Flashcard added successfully"
+                NotificationHelper.showFlashcardNotification(
+                    context,
+                    "Flashcard Added",
+                    "New flashcard has been added successfully"
+                )
                 _errorMessage.value = null
             } catch (e: Exception) {
                 _errorMessage.value = "Failed to add flashcard: ${e.message}"

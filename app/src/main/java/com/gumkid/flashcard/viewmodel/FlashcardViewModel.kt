@@ -172,13 +172,16 @@ class FlashcardViewModel @Inject constructor(
     }
 
     private fun extractCategories(flashcards: List<Flashcard>) {
-        val categorySet = mutableSetOf<String>()
+        val categoryMap = mutableMapOf<String, String>() // lower -> original
         flashcards.forEach { flashcard ->
             if (flashcard.category.isNotEmpty()) {
-                categorySet.add(flashcard.category)
+                val lower = flashcard.category.lowercase()
+                if (!categoryMap.containsKey(lower)) {
+                    categoryMap[lower] = flashcard.category
+                }
             }
         }
-        _categories.value = categorySet.toList()
+        _categories.value = categoryMap.values.toList()
     }
 
     fun clearCurrentFlashcard() {

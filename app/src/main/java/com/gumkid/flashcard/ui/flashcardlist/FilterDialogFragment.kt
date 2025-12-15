@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
+import com.gumkid.flashcard.R
 import com.gumkid.flashcard.databinding.DialogFilterBinding
 import com.gumkid.flashcard.viewmodel.FlashcardViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,8 +25,12 @@ class FilterDialogFragment : DialogFragment() {
     private val selectedDifficulties = mutableListOf<Int>()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = super.onCreateDialog(savedInstanceState)
-        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        val dialog = Dialog(requireContext())
+        dialog.setContentView(R.layout.dialog_filter)
+        dialog.window?.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
         return dialog
     }
 
@@ -41,22 +46,22 @@ class FilterDialogFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Initialize selected lists with current filter state
-        selectedCategories.addAll(viewModel.getCurrentSelectedCategories() ?: emptyList())
+        // Initialize selected lists with current filter state (store in lowercase for case-insensitive comparison)
+        selectedCategories.addAll(viewModel.getCurrentSelectedCategories()?.map { it.lowercase() } ?: emptyList())
         selectedDifficulties.addAll(viewModel.getCurrentSelectedDifficulties() ?: emptyList())
 
         setupCategoryCheckboxes()
         setupDifficultyCheckboxes()
         setupListeners()
-        binding.btnApply.isEnabled = false
+        updateApplyButtonState()
     }
 
     private fun setupCategoryCheckboxes() {
         viewModel.categories.observe(viewLifecycleOwner) { categories ->
             binding.categoriesContainer.removeAllViews()
 
-            // Remove categories that are no longer available
-            selectedCategories.retainAll(categories)
+            // Remove categories that are no longer available (case-insensitive)
+            selectedCategories.retainAll(categories.map { it.lowercase() })
 
             categories.forEach { category ->
                 val checkBox = CheckBox(requireContext()).apply {
@@ -68,6 +73,7 @@ class FilterDialogFragment : DialogFragment() {
                         } else {
                             selectedCategories.remove(category)
                         }
+                        updateApplyButtonState()
                     }
                 }
                 binding.categoriesContainer.addView(checkBox)
@@ -92,6 +98,7 @@ class FilterDialogFragment : DialogFragment() {
                 } else {
                     selectedDifficulties.remove(difficulty)
                 }
+                updateApplyButtonState()
             }
         }
     }
@@ -113,12 +120,24 @@ class FilterDialogFragment : DialogFragment() {
     }
 
     private fun applyFilters() {
-        viewModel.filterByCategories(selectedCategories.ifEmpty { null })
+        // Map lowercase selected categories back to original case
+        val originalCaseCategories = if (selectedCategories.isNotEmpty()) {
+            viewModel.categories.value?.filter { category ->
+                selectedCategories.contains(category.lowercase())
+            } ?: emptyList()
+        } else {
+            null
+        }
+        viewModel.filterByCategories(originalCaseCategories)
         viewModel.filterByDifficulties(selectedDifficulties.ifEmpty { null })
     }
 
     private fun clearFilters() {
         viewModel.clearFilters()
+    }
+
+    private fun updateApplyButtonState() {
+        binding.btnApply.isEnabled = selectedCategories.isNotEmpty() || selectedDifficulties.isNotEmpty()
     }
 
     override fun onDestroyView() {

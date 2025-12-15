@@ -84,7 +84,7 @@ class FlashcardListFragment : Fragment() {
     private fun setupObservers() {
         viewModel.flashcards.observe(viewLifecycleOwner) { flashcards ->
             adapter.submitList(flashcards)
-            binding.tvEmpty.visibility = if (flashcards.isEmpty()) View.VISIBLE else View.GONE
+            binding.emptyState.visibility = if (flashcards.isEmpty()) View.VISIBLE else View.GONE
         }
 
         viewModel.totalCount.observe(viewLifecycleOwner) { count ->

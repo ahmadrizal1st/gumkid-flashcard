@@ -248,4 +248,8 @@ class FlashcardViewModel @Inject constructor(
         currentSelectedDifficulties = null
         applyFilters()
     }
+
+    fun getCurrentSelectedCategories(): List<String>? = currentSelectedCategories
+
+    fun getCurrentSelectedDifficulties(): List<Int>? = currentSelectedDifficulties
 }

@@ -41,6 +41,10 @@ class FilterDialogFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Initialize selected lists with current filter state
+        selectedCategories.addAll(viewModel.getCurrentSelectedCategories() ?: emptyList())
+        selectedDifficulties.addAll(viewModel.getCurrentSelectedDifficulties() ?: emptyList())
+
         setupCategoryCheckboxes()
         setupDifficultyCheckboxes()
         setupListeners()
@@ -77,6 +81,7 @@ class FilterDialogFragment : DialogFragment() {
         )
 
         difficultyCheckboxes.forEach { (checkBox, difficulty) ->
+            checkBox.isChecked = selectedDifficulties.contains(difficulty)
             checkBox.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
                     selectedDifficulties.add(difficulty)

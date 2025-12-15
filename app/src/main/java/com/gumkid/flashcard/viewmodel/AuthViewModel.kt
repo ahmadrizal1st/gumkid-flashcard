@@ -55,8 +55,8 @@ class AuthViewModel @Inject constructor(
     }
 
     fun signUp(email: String, password: String) {
+        _isLoading.value = true
         viewModelScope.launch {
-            _isLoading.value = true
             val result = authRepository.createUserWithEmailAndPassword(email, password)
             _isLoading.value = false
 

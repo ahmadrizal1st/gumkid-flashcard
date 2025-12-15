@@ -60,11 +60,14 @@ class RegisterFragment : Fragment() {
 
     private fun setupListeners() {
         binding.btnSignUp.setOnClickListener {
+            if (viewModel.isLoading.value == true) return@setOnClickListener
+
             val email = binding.etEmail.text.toString().trim()
             val password = binding.etPassword.text.toString().trim()
             val confirmPassword = binding.etConfirmPassword.text.toString().trim()
+            val termsAccepted = binding.cbTerms.isChecked
 
-            if (validateInput(email, password, confirmPassword)) {
+            if (validateInput(email, password, confirmPassword, termsAccepted)) {
                 viewModel.signUp(email, password)
             }
         }
@@ -76,7 +79,7 @@ class RegisterFragment : Fragment() {
         }
     }
 
-    private fun validateInput(email: String, password: String, confirmPassword: String): Boolean {
+    private fun validateInput(email: String, password: String, confirmPassword: String, termsAccepted: Boolean): Boolean {
         var isValid = true
 
         if (email.isEmpty()) {
@@ -107,6 +110,11 @@ class RegisterFragment : Fragment() {
             isValid = false
         } else {
             binding.tilConfirmPassword.error = null
+        }
+
+        if (!termsAccepted) {
+            Toast.makeText(requireContext(), "Please accept the Terms and Conditions", Toast.LENGTH_SHORT).show()
+            isValid = false
         }
 
         return isValid

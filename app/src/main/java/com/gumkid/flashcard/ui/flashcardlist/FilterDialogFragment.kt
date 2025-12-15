@@ -48,16 +48,20 @@ class FilterDialogFragment : DialogFragment() {
         setupCategoryCheckboxes()
         setupDifficultyCheckboxes()
         setupListeners()
+        binding.btnApply.isEnabled = false
     }
 
     private fun setupCategoryCheckboxes() {
         viewModel.categories.observe(viewLifecycleOwner) { categories ->
             binding.categoriesContainer.removeAllViews()
-            selectedCategories.clear()
+
+            // Remove categories that are no longer available
+            selectedCategories.retainAll(categories)
 
             categories.forEach { category ->
                 val checkBox = CheckBox(requireContext()).apply {
                     text = category
+                    isChecked = selectedCategories.contains(category)
                     setOnCheckedChangeListener { _, isChecked ->
                         if (isChecked) {
                             selectedCategories.add(category)

@@ -1,12 +1,14 @@
 package com.gumkid.flashcard.viewmodel
 
 import android.content.Context
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gumkid.flashcard.model.Flashcard
 import com.gumkid.flashcard.repository.FlashcardRepository
+import com.gumkid.flashcard.ui.flashcardlist.FilterDialogFragment
 import com.gumkid.flashcard.util.NotificationHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -210,7 +212,7 @@ class FlashcardViewModel @Inject constructor(
         currentSelectedCategories?.let { categories ->
             if (categories.isNotEmpty()) {
                 filtered = filtered.filter { flashcard ->
-                    categories.contains(flashcard.category)
+                    categories.any { it.equals(flashcard.category, ignoreCase = true) }
                 }
             }
         }
@@ -252,4 +254,9 @@ class FlashcardViewModel @Inject constructor(
     fun getCurrentSelectedCategories(): List<String>? = currentSelectedCategories
 
     fun getCurrentSelectedDifficulties(): List<Int>? = currentSelectedDifficulties
+
+    fun showFilterDialog(fragment: androidx.fragment.app.Fragment) {
+        val filterDialog = FilterDialogFragment()
+        filterDialog.show(fragment.childFragmentManager, "FilterDialog")
+    }
 }
